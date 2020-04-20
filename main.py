@@ -27,7 +27,8 @@ y2 = y + height
 vel = 10
 newCoin = coin(0,0,0,0)
 needCoin = True
-amountLeft = 2
+amountLeft = 10
+paths = []
 
 
 def generateCoin():
@@ -38,6 +39,7 @@ def generateCoin():
     return coin(randX, randY, 10, 10)
 
 
+AImode = True
 run = True
 start_ticks=pygame.time.get_ticks()
 while run:
@@ -49,6 +51,9 @@ while run:
 
     if(amountLeft > 0):
         keys = pygame.key.get_pressed()
+
+        if AImode:
+            pass
 
         if keys[pygame.K_LEFT] and x > vel:
             x -= vel
@@ -64,7 +69,20 @@ while run:
             newCoin = generateCoin()
             needCoin = False
 
-        
+        #go down
+        if(y < newCoin.y):
+            while(y < newCoin.y):
+                y += vel
+        #go up
+        elif(y > newCoin.y) :
+            y -= vel
+        #go left
+        if(x > newCoin.x):
+            x -= vel
+        #go right
+        elif(x < newCoin.x):
+            x += vel
+
         coin_rect = pygame.Rect(newCoin.x, newCoin.y, newCoin.width, newCoin.height)
         pygame.draw.rect(win, (0,255,0), coin_rect)
         player = pygame.Rect(x, y, width, height)
