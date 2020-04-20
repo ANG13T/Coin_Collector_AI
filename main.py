@@ -29,6 +29,7 @@ newCoin = coin(0,0,0,0)
 needCoin = True
 amountLeft = 10
 paths = []
+gameOver = False
 
 
 def generateCoin():
@@ -43,17 +44,23 @@ AImode = True
 run = True
 start_ticks=pygame.time.get_ticks()
 while run:
+    keys = pygame.key.get_pressed()
     seconds=(pygame.time.get_ticks()-start_ticks)/1000
     pygame.time.delay(100)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
 
-    if(amountLeft > 0):
-        keys = pygame.key.get_pressed()
+        if keys[pygame.K_r]:
+            amountLeft = 10
+            gameOver = False
 
+    if(gameOver == False):
         if AImode:
             pass
+
+        if amountLeft <= 0:
+            gameOver = True
 
         if keys[pygame.K_LEFT] and x > vel:
             x -= vel
@@ -70,17 +77,16 @@ while run:
             needCoin = False
 
         #go down
-        if(y < newCoin.y):
-            while(y < newCoin.y):
-                y += vel
+        if(y < newCoin.y and (abs(newCoin.y - y) > 5)):
+            y += vel
         #go up
-        elif(y > newCoin.y) :
+        elif(y > newCoin.y and (abs(newCoin.y - y) > 5)):
             y -= vel
         #go left
-        if(x > newCoin.x):
+        if(x > newCoin.x and (abs(newCoin.x - x) > 5)):
             x -= vel
         #go right
-        elif(x < newCoin.x):
+        elif(x < newCoin.x and (abs(newCoin.x - x) > 5)):
             x += vel
 
         coin_rect = pygame.Rect(newCoin.x, newCoin.y, newCoin.width, newCoin.height)
